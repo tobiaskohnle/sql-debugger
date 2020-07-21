@@ -1,0 +1,185 @@
+
+* {
+    color: inherit;
+    tab-size: 2;
+
+    box-sizing: inherit;
+    white-space: pre-wrap;
+
+    overflow-x: hidden;
+}
+
+:root {
+    background: #000;
+    box-sizing: border-box;
+
+    color: #fff;
+}
+::selection {
+    background: #259;
+}
+
+body {
+    margin: 12px;
+    overflow: hidden;
+}
+
+.debug-text {
+    width: max-content;
+
+    position: fixed;
+    top: 20px;
+    right: 30px;
+
+    color: #155;
+    font: 18px monospace;
+
+    pointer-events: none;
+}
+
+.editor {
+    position: relative;
+
+    display: grid;
+    grid-template-areas: 'line-numbers input';
+    grid-template-columns: min-content 1fr;
+}
+.editor * {
+    overflow-y: hidden;
+}
+
+.text .wave {
+    background-image: url('src/wave_underline.png');
+    background-size: 8px;
+    background-position: bottom;
+    background-repeat: repeat-x;
+}
+.text .current_line {
+    background: #3b33;
+    box-shadow: 0 0 0 1px #3f3a;
+}
+.text .current_line.can_step_into {
+    animation: flashing_background 700ms linear infinite;
+    box-shadow: 0 0 0 1px #ff3a;
+}
+.text .current_line.is_closing_step {
+    animation: none;
+    background: #aaa3;
+    box-shadow: 0 0 0 1px #eee9;
+}
+@keyframes flashing_background {
+    0%, 100% {
+        background: #ab32;
+    }
+    50% {
+        background: #df53;
+    }
+}
+
+.result .null {
+    color: #eee6;
+    font-style: italic;
+}
+
+.input, .text, .line-numbers {
+    width: 100%;
+
+    padding: 8px;
+
+    font: 24px consolas, monospace;
+    background: #0000;
+
+    word-wrap: break-word;
+    word-break: break-word;
+
+    resize: none;
+    border: none;
+    outline: none;
+}
+
+.line-numbers {
+    grid-area: line-numbers;
+
+    color: #fff3;
+    border-right: 1px dotted #fff4;
+
+    word-wrap: unset;
+    word-break: unset;
+    text-align: right;
+    pointer-events: none;
+    user-select: none;
+}
+.text {
+    grid-area: input;
+
+    pointer-events: none;
+    user-select: none;
+}
+.input {
+    grid-area: input;
+
+    padding-bottom: calc(1em + 8px);
+
+    color: #0000;
+    caret-color: #fff;
+}
+.input::selection {
+    color: #0000;
+}
+
+/* result table */
+
+.result {
+    /*width: 100%;*/
+    width: calc(100% - 44px);
+
+    margin: 22px;
+
+    font: 16px Verdana, Geneva, Tahoma, Arial, Helvetica, sans-serif;
+    border-spacing: 0;
+
+    border: 2px solid #444;
+}
+
+.result::before {
+    width: max-content;
+    content: var(--before_content, 'Shift+Enter to run, Ctrl+Shift+Enter to debug');
+
+    position: absolute;
+    transform: translate(0, -130%);
+
+    color: #2ff5;
+}
+
+.result td, .result th {
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+
+    /*border-top: 1px solid #aaa2;*/
+}
+.result td {
+    word-break: break-all;
+}
+.result th {
+    color: #49f;
+}
+
+.result tr:nth-child(even) {
+    /*background: #aaa1;*/
+
+    background: repeating-linear-gradient(
+        -45deg,
+        #5551 0px,
+        #5551 4px,
+        #4442 4px,
+        #4442 8px
+    );
+}
+
+/*.result tr:nth-child(odd) *:nth-child(even) {
+    background: #5551;
+}
+.result tr:nth-child(even) *:nth-child(even) {
+    background: #2221;
+}*/
