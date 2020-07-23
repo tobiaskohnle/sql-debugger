@@ -21,6 +21,14 @@ Math.clamp = function(v, min, max) {
 Math.between = function(value, min,max) {
     return min <= value && value < max;
 };
+Array.prototype.find_last_index = function(callback) {
+    const index = this.copy().reverse().findIndex(callback);
+    if (index == -1) {
+        return -1;
+    }
+
+    return this.length-index-1;
+};
 Array.prototype.find_last = function(callback) {
     return this[this.find_last_index(callback)];
 };
