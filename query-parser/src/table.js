@@ -107,9 +107,12 @@ async function load_new_database() {
         if (entry.isFile) {
             const table_file = await entry.getFile();
 
+            const extention_dot_index = table_file.name.lastIndexOf('.');
+            const table_name = extention_dot_index==-1 ? table_file.name : table_file.name.substring(0,extention_dot_index);
+
             const file_reader = new FileReader;
             file_reader.onload = function() {
-                const {table_name, table} = table_from_text(database_name, file_reader.result);
+                const table = table_from_text(database_name, table_name, file_reader.result);
                 new_database[table_name] = table;
             };
 
@@ -120,17 +123,16 @@ async function load_new_database() {
     database_cache[database_name] = new_database;
 }
 
-function table_from_text(database_name, text) {
+function table_from_text(database_name, table_name, text) {
     const lines = text.split(/\n/g).filter(x => x);
 
-    const table_name = lines[0].trim();
-    const fields_text = lines[1];
-    const rows_texts = lines.slice(2);
+    const fields_text = lines[0];
+    const rows_texts = lines.slice(1);
 
     const valid_types = ['number', 'string'];
 
     const fields = Array.from(fields_text.matchAll(/(\w+):(\w+)/g)).map(match => {
-        const [_, name, type] = match;
+        let [_, name, type] = match;
 
         if (!valid_types.includes(type)) {
             throw new Error(`invalid type '${type}'`);
@@ -176,7 +178,7 @@ function table_from_text(database_name, text) {
         table.add_row(row);
     }
 
-    return {table_name, table};
+    return table;
 }
 
 function tr(td_list) {

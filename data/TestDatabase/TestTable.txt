@@ -1,0 +1,4 @@
+Id:number       StringColumn:string           NumberColumn:number
+0               ColumnStringValue0            100
+1               ColumnStringValue1            200
+2               ColumnStringValue2            300
