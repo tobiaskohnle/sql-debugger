@@ -100,12 +100,12 @@ function load_database(name) {
 async function load_new_database() {
     const new_database = {};
 
-    const database_folder = await chooseFileSystemEntries({type:'open-directory'});
+    const database_folder = await showDirectoryPicker();
     const database_name = database_folder.name;
 
-    for await (const entry of database_folder.getEntries()) {
-        if (entry.isFile) {
-            const table_file = await entry.getFile();
+    for await (const [entry_name,entry_handle] of database_folder) {
+        if (entry_handle.kind == 'file') {
+            const table_file = await entry_handle.getFile();
 
             const extention_dot_index = table_file.name.lastIndexOf('.');
             const table_name = extention_dot_index==-1 ? table_file.name : table_file.name.substring(0,extention_dot_index);
